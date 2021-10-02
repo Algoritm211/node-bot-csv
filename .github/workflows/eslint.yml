@@ -1,0 +1,18 @@
+name: ESLint/TS tests
+
+on:
+  push:
+    branches: [main, develop]
+
+jobs:
+  default-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+      - name: Test Eslint
+        run: |
+          npm i
+          npm run lint
