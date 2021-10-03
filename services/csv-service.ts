@@ -18,7 +18,7 @@ export class CSVService {
   }
 
   public readAllCSV = async (pathToFile: string) => {
-    const records: Array<{ [key: string]: string | number | boolean }> = [];
+    const records: Array<{ [key: string]: string }> = [];
     const parser = fs
       .createReadStream(pathToFile)
       .pipe(this.parserWithOptions);
@@ -33,11 +33,17 @@ export class CSVService {
   }
 
   public getDataByColumns = async (
-    // pathToFile: string,
-    // columns: Array<string> = [],
+    pathToFile: string,
+    searchColumn: string,
+    textSearch: string,
   ) => {
-    // const records: Array<{ [key: string]: string | number | boolean }> = [];
-    // //Todo think about this function
+    const allRecords = await this.readAllCSV(pathToFile);
+    try {
+      return allRecords.filter((record) => {
+        return record[searchColumn].includes(textSearch);
+      });
+    } catch (error) {
+      throw new Error('A non-existent column was transferred');
+    }
   }
-
 }
