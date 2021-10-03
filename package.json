@@ -14,7 +14,8 @@
   "dependencies": {
     "consola": "^2.15.3",
     "csv": "^5.5.3",
-    "csv-parser": "^3.0.0"
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.6",

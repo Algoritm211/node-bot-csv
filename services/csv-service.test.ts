@@ -1,4 +1,5 @@
 import { CSVService } from './csv-service';
+import fs from 'fs';
 
 describe('Testing service for working with csv', () => {
   const testDataPath = './test-data/test-data.csv';
@@ -40,6 +41,32 @@ describe('Testing service for working with csv', () => {
         'Non-existent-identifier',
         '9346',
       )).rejects.toThrowError('A non-existent column was transferred');
+    });
+  });
+
+  describe('Testing generateCSVFromObj function', () => {
+    const testCsvFilePath = './test-data/test.csv';
+
+    afterAll(() => {
+      if (fs.existsSync(testCsvFilePath)) {
+        fs.unlinkSync(testCsvFilePath);
+      }
+    });
+
+    it('generateCSVFromObj create files from JS objects right', async () => {
+
+      const TEST_FILE_NAME = 'test';
+      // Now file is not exist
+      expect(fs.existsSync(`./test-data/${TEST_FILE_NAME}.csv`)).toBe(false);
+      const service = new CSVService();
+      const testObjForGenerateCsv = [
+        { name: 'Bob',  lang: 'French, English' },
+        { name: 'Mary', lang: 'English' },
+      ];
+
+      await service.generateCSVFromObj(testObjForGenerateCsv, TEST_FILE_NAME);
+      // After generating the file must exist
+      expect(fs.existsSync(`./test-data/${TEST_FILE_NAME}.csv`)).toBe(true);
     });
   });
 });

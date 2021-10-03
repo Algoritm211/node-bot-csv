@@ -1,5 +1,6 @@
 import parse from 'csv-parse';
 import fs from 'fs';
+import { createObjectCsvWriter } from 'csv-writer';
 // For using with promises
 import { finished } from 'stream/promises';
 
@@ -45,5 +46,24 @@ export class CSVService {
     } catch (error) {
       throw new Error('A non-existent column was transferred');
     }
+  }
+
+  public generateCSVFromObj = async (
+    obj: Array<{ [key: string]: string }>,
+    fileName: string = Date.now().toString(),
+  ) => {
+    // Getting keys for header from first object of array
+    const headerColumns = Object.keys(obj[0]).map((key) => {
+      // Need uppercase for title
+      return { id: key, title: key.charAt(0).toUpperCase() + key.slice(1) };
+    });
+
+    const csvWriter = createObjectCsvWriter({
+      path: `./test-data/${fileName}.csv`,
+      fieldDelimiter: this.DELIMITER,
+      header: headerColumns,
+    });
+
+    await csvWriter.writeRecords(obj);
   }
 }
